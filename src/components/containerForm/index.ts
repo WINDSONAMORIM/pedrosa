@@ -6,6 +6,13 @@ export const ContainerForm = styled.section`
     display: flex;    
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    padding: 10px;
+    padding: 20px;
+
+    @media (min-height: 600px) {
+        justify-content: flex-start;
+    }
+
+    @media (max-height: 900px) {
+        justify-content: center;
+    }
 `

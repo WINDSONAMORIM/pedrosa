@@ -6,29 +6,20 @@ import { Form } from '../../components/form';
 import { WrapperContent } from '../../components/wrapperContent';
 
 export const Login = () => {
-    return (
-//<WrapperContent>    
-<Box sx={{ width: '100vw', height: '100vh', justifyContent: "center",  alignItems: "center"}}>
-        <Grid container spacing={2} sx={{ width: '100%', height: '100%'}}>
+    return (   
+    <Box sx={{ width: '100vw', height: '100vh'}}>
+        <Grid container spacing={2} sx={{ height: '100%'}} >
             <Grid item xs={12} md={8}>
-                <Box sx={{width: '100%', height: '100%'}}>
+                <Box sx={{width: '100%', height: '100%', px:2}}>
                     <BannerLogin />
                 </Box>
-            </Grid>
-            <Grid item xs={12} md={4} >    
+            </Grid>            
+            <Grid item xs={12} md={4}>                    
                 <ContainerForm>
                     <Form mode='login' />
                 </ContainerForm>                
-            </Grid>
+            </Grid>            
         </Grid>
-</Box> 
-   // </WrapperContent>/*    
-     /*   <WrapperContent>
-            <BannerLogin />
-            <ContainerForm>
-                <Form mode='login' />
-            </ContainerForm>    
-        </WrapperContent>*/
-
+    </Box> 
     )
 } 
