@@ -1,6 +1,9 @@
+import { Button } from '@mui/material';
 import React, { useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HomeContent } from '../../components/wrapperContent';
+import { HeaderHome } from '../../components/headerHome';
+import { ModalVenda } from '../../components/modalVenda/modalVenda';
+import { WrapperContent } from '../../components/wrapperContent';
 
 export const Home = ()=>{
     const navigate = useNavigate();
@@ -15,11 +18,30 @@ export const Home = ()=>{
             } else {
                 setUserLogged(usuarioLogado);
             }
-    },[])    
+    },[])   
+    
+    const [openModal, setOpenModal] = useState(false)
 
-    return(      
-        <HomeContent>
-            <h1>bemvindo</h1>
-        </HomeContent>    
+    const addVenda = () => {
+        setOpenModal(true);
+    }
+
+    const handleClose = () => {
+        setOpenModal(false);
+    }
+
+    const openPageVenda = () => {
+        navigate('/venda');
+    }
+
+    return( 
+        <>
+        <HeaderHome />     
+        <WrapperContent>
+        <Button onClick={() => addVenda()}>Open modal</Button>
+        <Button onClick={() => openPageVenda()}>Open Venda</Button>
+        <ModalVenda open={openModal} handleClose={handleClose}/>
+        </WrapperContent>  
+        </>
     )
 }

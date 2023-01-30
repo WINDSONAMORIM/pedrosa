@@ -21,6 +21,5 @@ export const Signup = ()=>{
             </Grid>            
         </Grid>
         </Box> 
-
     )
 }
