@@ -9,7 +9,7 @@ interface CardDefaultProps{
 export const CardVenda = ({label, imagem}:CardDefaultProps) =>{
     return(
         <>
-            <Card style={{ boxShadow: "10px 10px 5px #888888" }} sx={{ minWidth: 275, maxWidth: 345}}>
+            <Card style={{ boxShadow: "10px 10px 5px #888888" }} sx={{ minWidth: 75, maxWidth: 345}}>
                 <CardContent >
                     <Typography variant="h5" component="div" textAlign='center'>
                     {label}
@@ -17,7 +17,8 @@ export const CardVenda = ({label, imagem}:CardDefaultProps) =>{
                 </CardContent>
                 <CardMedia
                     component="img"
-                    height='275' 
+                    height='175' 
+                    width='150'
                     image={imagem}
                     alt="lavatorio"
                 />
