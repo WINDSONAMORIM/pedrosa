@@ -1,39 +1,48 @@
-import React, { useEffect, useState} from 'react';
-import { HeaderHome } from '../../components/headerHome';
-import { ModalVenda } from '../../components/modalVenda/modalVenda';
-import { WrapperContent } from '../../components/wrapperContent';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
-import { CardVenda } from '../../components/card';
+import React, { useEffect, useState } from "react";
+import { HeaderHome } from "../../components/headerHome";
+import { ModalVenda } from "../../components/modalVenda/modalVenda";
+import { Grid } from "@mui/material";
+import { CardVenda } from "../../components/card";
 
-const imagem = require('../../assets/images/lavatorio.png')
+const lavatorio = require("../../assets/images/lavatorio.png");
+const cadeira = require("../../assets/images/cadeira.jpg");
+const ciranda = require("../../assets/images/ciranda.jpg");
+const poltrona = require("../../assets/images/poltrona.jpg");
 
-export const Venda = ()=> {
+export const Venda = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [label, setLabel] = useState("");
 
-    const [openModal, setOpenModal] = useState(false)
+  const addVenda = (label: string) => {
+    setOpenModal(true);
+    setLabel(label);
+  };
 
-    const addVenda = () => {
-        setOpenModal(true);
-    }
-
-    const handleClose = () => {
-        setOpenModal(false);
-    }
-    return(
-        <>
-        <HeaderHome />     
-        <Grid container spacing={2} sx={{ height: '100%'}} >
-            <Grid item xs={6} md={4}>
-                <CardVenda label='LAVATÓRIOS' imagem={imagem}/>
-            </Grid>
-            <Grid item xs={6} md={4}>
-                <CardVenda label='CADEIRAS' imagem={imagem}/>
-            </Grid>
-            <Grid item xs={6} md={4}>
-                <CardVenda label='SOFÁS' imagem={imagem}/>
-            </Grid>
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+  return (
+    <>
+      <HeaderHome />
+      <Grid container spacing={2} sx={{ height: "100%" }}>
+        <Grid item xs={6} md={3}>
+          <CardVenda
+            label="LAVATÓRIOS"
+            imagem={lavatorio}
+            onClickCard={addVenda}
+          />
         </Grid>
-        <ModalVenda open={openModal} handleClose={handleClose}/>        
-        </>
-    )
-}
+        <Grid item xs={6} md={3}>
+          <CardVenda label="CADEIRAS" imagem={cadeira} onClickCard={addVenda} />
+        </Grid>
+        <Grid item xs={6} md={3}>
+          <CardVenda label="CIRANDAS" imagem={ciranda} onClickCard={addVenda} />
+        </Grid>
+        <Grid item xs={6} md={3}>
+          <CardVenda label="SOFÁS" imagem={poltrona} onClickCard={addVenda} />
+        </Grid>
+      </Grid>
+      <ModalVenda label={label} open={openModal} handleClose={handleClose} />
+    </>
+  );
+};
