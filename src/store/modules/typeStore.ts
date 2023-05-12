@@ -1,0 +1,9 @@
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  profile?: string;
+  password?: string;  
+}
+
+export type Users = User[];

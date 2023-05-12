@@ -25,12 +25,7 @@ export const CardVenda = ({ label, imagem, onClickCard }: CardDefaultProps) => {
             {label}
           </Typography>
         </CardContent>
-        <CardMedia
-          component="img"
-          height="220"
-          image={imagem}
-          alt="lavatorio"
-        />
+        <CardMedia component="img" height="220" image={imagem} />
         <CardActions sx={{ m: 2, justifyContent: "right" }}>
           <AddShoppingCartIcon
             onClick={(e) => onClickCard(label)}

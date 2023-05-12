@@ -1,6 +1,5 @@
 import React from 'react';
 import { ContainerForm } from '../../components/containerForm';
-import { WrapperContent } from '../../components/wrapperContent';
 import { BannerLogin } from '../../components/bannerLogin';
 import { Form } from '../../components/form';
 import { Box, Grid } from '@mui/material';

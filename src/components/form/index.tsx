@@ -1,203 +1,326 @@
 import React, { useEffect, useState } from "react";
-import { Stack, Button, Box, Typography, Alert } from '@mui/material';
+import { Stack, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { InputDefault, Name } from "../inputDefault";
 
-interface FormProps{
-    mode: 'login' | 'signup'
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
+import {
+  addUser,
+  searchUsers,
+  getUserAll,
+} from "../../store/modules/users/userSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hoocks";
+import { setUserLogged } from "../../store/modules/userLogged/userLoggedSlice";
+
+interface FormProps {
+  mode: "login" | "signup";
 }
 
-interface Recado {
-    id: string;
-    description: string;
-    detail: string;
+enum Profile {
+  CARPENTER = "CARPENTER",
+  DELIVERY = "DELIVERY",
+  TAPESTRY = "TAPESTRY",
+  SELLER = "SELLER",
 }
 
-interface User {
-    name: string;
-    email: string;
-    password: string;
-    recados: Recado[];
-}
+export const Form = ({ mode }: FormProps) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repassword, setRepassword] = useState("");
+  const [profile, setProfile] = useState<Profile | string>(Profile.CARPENTER);
+  const [errorName, setErrorName] = useState(false);
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(false);
+  const listaUsuarios = useAppSelector(searchUsers);
 
-export const Form = ({mode}: FormProps)=>{
-    const[name, setName] = useState('');
-    const[email, setEmail] = useState('');
-    const[password, setPassword] = useState('');
-    const[repassword, setRepassword] = useState('');
-    const[errorName, setErrorName] = useState(false);
-    const[errorEmail, setErrorEmail] = useState(false);
-    const[errorPassword, setErrorPassword] = useState(false); 
-    const[listaUsuarios, setListaUsuarios] = useState<User[]>(JSON.parse(localStorage.getItem('listaUsers') ?? '[]'));
+  const dispatch = useAppDispatch();
 
-    const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(getUserAll());
+  }, [dispatch]);
 
-    useEffect(
-        () => {
-            localStorage.setItem('listaUsers', JSON.stringify(listaUsuarios));
-            clearInputs();
-        },
-        [listaUsuarios]
-    )
+  const navigate = useNavigate();
 
-    const handleValidateInput = (value: string, key: Name) => {
-        switch(key) {
-            case 'name':
-                if(value.length < 3) {
-                    setErrorName(true);
-                } else {
-                    setErrorName(false);
-                }
-            break;
-
-            case 'email':
-                // eslint-disable-next-line no-useless-escape
-                const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-                if(!value.match(regexEmail)) {
-                    setErrorEmail(true)
-                }else {
-                    setErrorEmail(false)
-                }
-            break;
-
-            case 'password':
-                if(mode === 'signup') {
-                    if(!value || value.length < 6) {
-                        setErrorPassword(true)
-                        
-                    } else {
-                        setErrorPassword(false)
-                    }
-                }
-
-                if(mode === 'login') {
-                    if(!value){
-                        setErrorPassword(true)
-                    } else {
-                        setErrorPassword(false)
-                    }
-                }
-            break;
-
-            case 'repassword':
-                if(value !== password) {
-                    setErrorPassword(true)
-                } else {
-                    setErrorPassword(false)
-                }
-            break
-
-            default:
-        }
-    }
-    
-    const handleChange = (value: string, key: Name) =>{
-        switch(key){
-            case 'name':
-                setName(value)
-                handleValidateInput(value, key)
-            break; 
-            case 'email':
-                setEmail(value)
-                handleValidateInput(value, key)
-            break;
-            case 'password':
-                setPassword(value)
-                handleValidateInput(value, key)
-            break;
-            case 'repassword':
-                setRepassword(value)
-                handleValidateInput(value, key)
-            break;
-
-            default:               
-        }
-    }
-
-    const handleNavigate = () => {
-        if(mode === 'login') {
-            navigate('/signup')
+  const handleValidateInput = (value: string, key: Name) => {
+    switch (key) {
+      case "name":
+        if (value.length < 3) {
+          setErrorName(true);
         } else {
-            navigate('/')
+          setErrorName(false);
         }
-    }
+        break;
 
-    const createAccount = () => {
-        const newUser = {
-            name,
-            email,
-            password,
-            recados: []
+      case "email":
+        // eslint-disable-next-line no-useless-escape
+        const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        if (!value.match(regexEmail)) {
+          setErrorEmail(true);
+        } else {
+          setErrorEmail(false);
+        }
+        break;
+
+      case "password":
+        if (mode === "signup") {
+          if (!value || value.length < 6) {
+            setErrorPassword(true);
+          } else {
+            setErrorPassword(false);
+          }
         }
 
-        const userExist = listaUsuarios.some((user) => user.email === newUser.email);
+        if (mode === "login") {
+          if (!value) {
+            setErrorPassword(true);
+          } else {
+            setErrorPassword(false);
+          }
+        }
+        break;
 
-        if(!userExist){
-            setListaUsuarios([...listaUsuarios, newUser]);          
-        }else{
-            alert('E-mail já cadastrado');
-        }        
+      case "repassword":
+        if (value !== password) {
+          setErrorPassword(true);
+        } else {
+          setErrorPassword(false);
+        }
+        break;
+
+      default:
+    }
+  };
+
+  const handleChange = (value: string, key: Name) => {
+    switch (key) {
+      case "name":
+        setName(value);
+        handleValidateInput(value, key);
+        break;
+      case "email":
+        setEmail(value);
+        handleValidateInput(value, key);
+        break;
+      case "password":
+        setPassword(value);
+        handleValidateInput(value, key);
+        break;
+      case "repassword":
+        setRepassword(value);
+        handleValidateInput(value, key);
+        break;
+
+      default:
+    }
+  };
+
+  // const handleNavigate = () => {
+  //   if (mode === "login") {
+  //     navigate("/signup");
+  //   } else {
+  //     navigate("/");
+  //   }
+  // };
+
+  const createAccount = () => {
+    const newUser = {
+      name,
+      email,
+      password,
+      profile,
+    };
+
+    const userExist = listaUsuarios.some(
+      (user) => user.email === newUser.email
+    );
+
+    if (!userExist) {
+      dispatch(addUser(newUser));
+      clearInputs();
+      navigate("/");
+    } else {
+      alert("E-mail já em uso!");
+    }
+  };
+
+  const login = () => {
+    const userExist = listaUsuarios.find((user) => user.email === email);
+    console.log("emailT: ", email, "emailB: ", userExist?.email);
+
+    if (!userExist) {
+      const confirma = window.confirm(
+        "Usuário não cadastrado. Deseja cadastrar uma conta? "
+      );
+      if (confirma) {
+        navigate("/signup");
+      }
     }
 
-    const login = () =>{
-        const userExist = listaUsuarios.find((user) => user.email === email && user.password === password);
-        if(!userExist) {
-            const confirma = window.confirm("Usuário não cadastrado. Deseja cadastrar uma conta? ") 
-            if(confirma) {
-                 navigate('/signup')
-            }
-         }
-         localStorage.setItem('usuarioLogado', JSON.stringify(userExist))
-         navigate('/home')
+    if (userExist?.password !== password) {
+      alert("Dados incorretos favor verifique os dados e tente novamente");
+      return;
     }
 
-    const clearInputs = () => {
-        setName('');
-        setEmail('');
-        setPassword('');
-        setRepassword('');
-    }
+    dispatch(
+      setUserLogged({
+        id: userExist.id,
+        name: userExist.name,
+        email: userExist.email,
+        password: userExist.password,
+        profile: userExist.profile,
+      })      
+    );
+    navigate("/home");
+  };
 
-    return(      
-            <React.Fragment>            
-                <Stack spacing={2}>  
-                    { mode === 'login' && (
-                        <>
-                        <InputDefault type="text" color={errorEmail ? 'error' : 'primary'} label="E-mail" name="email" value={email} handleChange={handleChange}/>
-                        <InputDefault type="password" color={errorPassword ? 'error' : 'primary'} label="Senha" name="password" value={password} handleChange={handleChange}/>
-                        <Button disabled={errorEmail||errorPassword} variant="outlined" color='primary' onClick={login}>Login</Button>
-                        </>
-                    )}
-                </Stack>
-                <Stack spacing={1} direction= 'row' >
-                    { mode === 'login' && (
-                        <>    
-                        <Typography variant='h6' >Não tem conta </Typography>
-                        <Typography variant='h6' color='primary' onClick={()=> navigate('/signup')}>Cadastre-se</Typography >
-                        </>
-                    )}    
-                </Stack>          
-            
-                <Stack spacing={2}>  
-                    { mode === 'signup' && (
-                        <>
-                        <InputDefault type="text" color={errorName ? 'error' : 'primary'} label="Nome" name="name" value={name} handleChange={handleChange}/>
-                        <InputDefault type="text" color={errorEmail ? 'error' : 'primary'} label="E-mail" name="email" value={email} handleChange={handleChange}/>
-                        <InputDefault type="password" color={errorPassword ? 'error' : 'primary'} label="Senha" name="password" value={password} handleChange={handleChange}/>
-                        <InputDefault type="password" color={errorPassword ? 'error' : 'primary'} label="Confirme sua Senha" name="repassword" value={repassword} handleChange={handleChange}/>
-                        <Button disabled={errorName||errorEmail||errorPassword} variant="outlined" color='primary' onClick={createAccount}>Cadastre-se</Button>
-                        </>
-                    )}
-                </Stack>
-                <Stack spacing={1} direction= 'row' >
-                    { mode === 'signup' && (
-                        <>    
-                        <Typography variant='h6' >Já tem conta? </Typography>
-                        <Typography variant='h6' color='primary' onClick={()=> navigate('/')}>Login</Typography >
-                        </>
-                    )}    
-                </Stack>          
-        </React.Fragment>            
-    )
-}
+  const clearInputs = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setRepassword("");
+  };
+
+  return (
+    <React.Fragment>
+      <Stack spacing={2}>
+        {mode === "login" && (
+          <>
+            <InputDefault
+              type="text"
+              color={errorEmail ? "error" : "primary"}
+              label="E-mail"
+              name="email"
+              value={email}
+              handleChange={handleChange}
+            />
+            <InputDefault
+              type="password"
+              color={errorPassword ? "error" : "primary"}
+              label="Senha"
+              name="password"
+              value={password}
+              handleChange={handleChange}
+            />
+            <Button
+              disabled={errorEmail || errorPassword}
+              variant="outlined"
+              color="primary"
+              onClick={login}
+            >
+              Login
+            </Button>
+          </>
+        )}
+      </Stack>
+      <Stack spacing={1} direction="row">
+        {mode === "login" && (
+          <>
+            <Typography variant="h6">Não tem conta </Typography>
+            <Typography
+              variant="h6"
+              color="primary"
+              onClick={() => navigate("/signup")}
+            >
+              Cadastre-se
+            </Typography>
+          </>
+        )}
+      </Stack>
+
+      <Stack spacing={2}>
+        {mode === "signup" && (
+          <>
+            <InputDefault
+              type="text"
+              color={errorName ? "error" : "primary"}
+              label="Nome"
+              name="name"
+              value={name}
+              handleChange={handleChange}
+            />
+            <InputDefault
+              type="text"
+              color={errorEmail ? "error" : "primary"}
+              label="E-mail"
+              name="email"
+              value={email}
+              handleChange={handleChange}
+            />
+            <InputDefault
+              type="password"
+              color={errorPassword ? "error" : "primary"}
+              label="Senha"
+              name="password"
+              value={password}
+              handleChange={handleChange}
+            />
+            <InputDefault
+              type="password"
+              color={errorPassword ? "error" : "primary"}
+              label="Confirme sua Senha"
+              name="repassword"
+              value={repassword}
+              handleChange={handleChange}
+            />
+            <RadioGroup
+              row
+              value={profile}
+              onChange={(e) => setProfile(e.target.value)}
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              defaultValue={Profile.CARPENTER}
+            >
+              <FormControlLabel
+                value={Profile.CARPENTER}
+                control={<Radio />}
+                label="Marcenária"
+              />
+              <FormControlLabel
+                value={Profile.DELIVERY}
+                control={<Radio />}
+                label="Motorista"
+              />
+              <FormControlLabel
+                value={Profile.TAPESTRY}
+                control={<Radio />}
+                label="Tapeçaria"
+              />
+              <FormControlLabel
+                value={Profile.SELLER}
+                control={<Radio />}
+                label="Vendedor"
+              />
+            </RadioGroup>
+            <Button
+              disabled={errorName || errorEmail || errorPassword}
+              variant="outlined"
+              color="primary"
+              onClick={createAccount}
+            >
+              Cadastre-se
+            </Button>
+          </>
+        )}
+      </Stack>
+      <Stack spacing={1} direction="row">
+        {mode === "signup" && (
+          <>
+            <Typography variant="h6">Já tem conta? </Typography>
+            <Typography
+              variant="h6"
+              color="primary"
+              onClick={() => navigate("/")}
+            >
+              Login
+            </Typography>
+          </>
+        )}
+      </Stack>
+    </React.Fragment>
+  );
+};

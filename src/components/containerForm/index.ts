@@ -12,7 +12,7 @@ export const ContainerForm = styled.section`
         justify-content: flex-start;
     }
 
-    @media (max-height: 900px) {
+    @media (max-height: 1000vh) {
         justify-content: center;
-    }
+    } 
 `
