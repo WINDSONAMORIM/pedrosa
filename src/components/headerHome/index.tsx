@@ -9,13 +9,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { useAppSelector } from "../../store/hoocks";
+import { useAppSelector } from "../../store/hooks";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export function HeaderHome() {
-
   const userLogged = useAppSelector((state) => state.userLogged);
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -29,7 +28,7 @@ export function HeaderHome() {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);    
+    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -135,7 +134,7 @@ export function HeaderHome() {
               onClick={handleOpenUserMenu}
               sx={{
                 display: "flex",
-                flexDirection: "column"                
+                flexDirection: "column",
               }}
             >
               <Typography

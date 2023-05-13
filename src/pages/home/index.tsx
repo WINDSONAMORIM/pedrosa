@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { HeaderHome } from "../../components/headerHome";
 import { ModalVenda } from "../../components/modalVenda/modalVenda";
 import { WrapperContent } from "../../components/wrapperContent";
-import { useAppSelector } from "../../store/hoocks";
+import { useAppSelector } from "../../store/hooks";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -13,16 +13,15 @@ export const Home = () => {
   // const [userLogged, setUserLogged] = useState(
   //   useAppSelector((state) => state.userLogged)
   // );
-    const [userLogged, setUserLogged] = useState(null);
+  const [userLogged, setUserLogged] = useState(null);
 
   // const usuarioLogado = JSON.parse(
   //   localStorage.getItem("usuarioLogado") ?? "[]"
   // );
 
   useEffect(() => {
-    //const user = useAppSelector((state) => state.userLogged); 
+    //const user = useAppSelector((state) => state.userLogged);
     // console.log('home: ',userLogged.name);
-
     //  usuarioLogado = localStorage.getItem("usuarioLogado");
     // if (!user) {
     //   navigate("/");

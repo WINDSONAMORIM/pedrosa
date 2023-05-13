@@ -12,11 +12,11 @@ import {
   searchUsers,
   getUserAll,
 } from "../../store/modules/users/userSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hoocks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setUserLogged } from "../../store/modules/userLogged/userLoggedSlice";
 
 interface FormProps {
-  mode: "login" | "signup";
+  mode: "login" | "signUp";
 }
 
 enum Profile {
@@ -30,12 +30,12 @@ export const Form = ({ mode }: FormProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [repassword, setRepassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
   const [profile, setProfile] = useState<Profile | string>(Profile.CARPENTER);
   const [errorName, setErrorName] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
-  const listaUsuarios = useAppSelector(searchUsers);
+  const listUsers = useAppSelector(searchUsers);
 
   const dispatch = useAppDispatch();
 
@@ -67,7 +67,7 @@ export const Form = ({ mode }: FormProps) => {
         break;
 
       case "password":
-        if (mode === "signup") {
+        if (mode === "signUp") {
           if (!value || value.length < 6) {
             setErrorPassword(true);
           } else {
@@ -84,7 +84,7 @@ export const Form = ({ mode }: FormProps) => {
         }
         break;
 
-      case "repassword":
+      case "repeatPassword":
         if (value !== password) {
           setErrorPassword(true);
         } else {
@@ -110,8 +110,8 @@ export const Form = ({ mode }: FormProps) => {
         setPassword(value);
         handleValidateInput(value, key);
         break;
-      case "repassword":
-        setRepassword(value);
+      case "repeatPassword":
+        setRepeatPassword(value);
         handleValidateInput(value, key);
         break;
 
@@ -121,7 +121,7 @@ export const Form = ({ mode }: FormProps) => {
 
   // const handleNavigate = () => {
   //   if (mode === "login") {
-  //     navigate("/signup");
+  //     navigate("/signUp");
   //   } else {
   //     navigate("/");
   //   }
@@ -135,7 +135,7 @@ export const Form = ({ mode }: FormProps) => {
       profile,
     };
 
-    const userExist = listaUsuarios.some(
+    const userExist = listUsers.some(
       (user) => user.email === newUser.email
     );
 
@@ -149,20 +149,20 @@ export const Form = ({ mode }: FormProps) => {
   };
 
   const login = () => {
-    const userExist = listaUsuarios.find((user) => user.email === email);
+    const userExist = listUsers.find((user) => user.email === email);
     console.log("emailT: ", email, "emailB: ", userExist?.email);
 
     if (!userExist) {
-      const confirma = window.confirm(
-        "Usuário não cadastrado. Deseja cadastrar uma conta? "
+      const confirm = window.confirm(
+        "User not registered. Do you want to register an account?"
       );
-      if (confirma) {
-        navigate("/signup");
+      if (confirm) {
+        navigate("/signUp");
       }
     }
 
     if (userExist?.password !== password) {
-      alert("Dados incorretos favor verifique os dados e tente novamente");
+      alert("Incorrect data please check the data and try again");
       return;
     }
 
@@ -173,7 +173,7 @@ export const Form = ({ mode }: FormProps) => {
         email: userExist.email,
         password: userExist.password,
         profile: userExist.profile,
-      })      
+      })
     );
     navigate("/home");
   };
@@ -182,7 +182,7 @@ export const Form = ({ mode }: FormProps) => {
     setName("");
     setEmail("");
     setPassword("");
-    setRepassword("");
+    setRepeatPassword("");
   };
 
   return (
@@ -201,7 +201,7 @@ export const Form = ({ mode }: FormProps) => {
             <InputDefault
               type="password"
               color={errorPassword ? "error" : "primary"}
-              label="Senha"
+              label="Password"
               name="password"
               value={password}
               handleChange={handleChange}
@@ -220,20 +220,20 @@ export const Form = ({ mode }: FormProps) => {
       <Stack spacing={1} direction="row">
         {mode === "login" && (
           <>
-            <Typography variant="h6">Não tem conta </Typography>
+            <Typography variant="h6">don't have account </Typography>
             <Typography
               variant="h6"
               color="primary"
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/signUp")}
             >
-              Cadastre-se
+              Register
             </Typography>
           </>
         )}
       </Stack>
 
       <Stack spacing={2}>
-        {mode === "signup" && (
+        {mode === "signUp" && (
           <>
             <InputDefault
               type="text"
@@ -254,7 +254,7 @@ export const Form = ({ mode }: FormProps) => {
             <InputDefault
               type="password"
               color={errorPassword ? "error" : "primary"}
-              label="Senha"
+              label="Password"
               name="password"
               value={password}
               handleChange={handleChange}
@@ -262,9 +262,9 @@ export const Form = ({ mode }: FormProps) => {
             <InputDefault
               type="password"
               color={errorPassword ? "error" : "primary"}
-              label="Confirme sua Senha"
-              name="repassword"
-              value={repassword}
+              label="Confirm Password"
+              name="repeatPassword"
+              value={repeatPassword}
               handleChange={handleChange}
             />
             <RadioGroup
@@ -302,15 +302,15 @@ export const Form = ({ mode }: FormProps) => {
               color="primary"
               onClick={createAccount}
             >
-              Cadastre-se
+              Register
             </Button>
           </>
         )}
       </Stack>
       <Stack spacing={1} direction="row">
-        {mode === "signup" && (
+        {mode === "signUp" && (
           <>
-            <Typography variant="h6">Já tem conta? </Typography>
+            <Typography variant="h6">already have an account?</Typography>
             <Typography
               variant="h6"
               color="primary"
