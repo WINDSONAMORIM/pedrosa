@@ -9,15 +9,7 @@ import { useAppSelector } from "../../store/hooks";
 export const Home = () => {
   const navigate = useNavigate();
 
-  //const userLogged = useAppSelector((state) => state.userLogged);
-  // const [userLogged, setUserLogged] = useState(
-  //   useAppSelector((state) => state.userLogged)
-  // );
   const [userLogged, setUserLogged] = useState(null);
-
-  // const usuarioLogado = JSON.parse(
-  //   localStorage.getItem("usuarioLogado") ?? "[]"
-  // );
 
   useEffect(() => {
     //const user = useAppSelector((state) => state.userLogged);
@@ -32,24 +24,14 @@ export const Home = () => {
 
   const [openModal, setOpenModal] = useState(false);
 
-  const addVenda = () => {
-    setOpenModal(true);
-  };
-
   const handleClose = () => {
     setOpenModal(false);
-  };
-
-  const openPageVenda = () => {
-    navigate("/venda");
   };
 
   return (
     <>
       <HeaderHome />
       <WrapperContent>
-        <Button onClick={() => addVenda()}>Open modal</Button>
-        <Button onClick={() => openPageVenda()}>Open Venda</Button>
         <ModalVenda label={""} open={openModal} handleClose={handleClose} />
       </WrapperContent>
     </>

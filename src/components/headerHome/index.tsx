@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,12 +10,31 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { useAppSelector } from "../../store/hooks";
-
-const pages = ["Products", "Pricing", "Blog"];
+import { useNavigate } from "react-router-dom";
+let pages = ['']
+//const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export function HeaderHome() {
+
+  //const [pages, setPages] = useState(['']);
+  
   const userLogged = useAppSelector((state) => state.userLogged);
+
+  // useEffect(() => {}, [userLogged]);
+  
+  switch (userLogged.profile){
+    case 'ADMIN': 
+    console.log("admin")
+    pages = ["Products", "Vendas", "Pricing", "Blog"];
+    break;
+  }
+
+  const navigate = useNavigate();
+
+  if (!userLogged) {
+    navigate("/");
+  }
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -31,8 +50,15 @@ export function HeaderHome() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+  const handleCloseNavMenu = (page: string) => {
+    switch (page){
+      case "Vendas":{
+        navigate("/venda");
+        setAnchorElNav(null);
+        console.log(page)
+      }
+    }
+    
   };
 
   const handleCloseUserMenu = () => {
@@ -92,7 +118,7 @@ export function HeaderHome() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={()=>handleCloseNavMenu(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -121,7 +147,7 @@ export function HeaderHome() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={()=>handleCloseNavMenu(page)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}

@@ -3,6 +3,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Grid,
   Typography,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -15,7 +16,7 @@ interface CardDefaultProps {
 
 export const CardVenda = ({ label, imagem, onClickCard }: CardDefaultProps) => {
   return (
-    <>
+    <Grid item xs={6} md={3}>
       <Card
         style={{ boxShadow: "10px 10px 5px #888888" }}
         sx={{ minWidth: 75, maxWidth: 345 }}
@@ -25,7 +26,11 @@ export const CardVenda = ({ label, imagem, onClickCard }: CardDefaultProps) => {
             {label}
           </Typography>
         </CardContent>
-        <CardMedia component="img" height="220" image={imagem} />
+        <CardMedia
+          component="img"
+          image={imagem}
+          sx={{ objectFit: "cover", maxHeight: "100%" }}
+        />
         <CardActions sx={{ m: 2, justifyContent: "right" }}>
           <AddShoppingCartIcon
             onClick={(e) => onClickCard(label)}
@@ -33,6 +38,6 @@ export const CardVenda = ({ label, imagem, onClickCard }: CardDefaultProps) => {
           />
         </CardActions>
       </Card>
-    </>
+    </Grid>
   );
 };

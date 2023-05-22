@@ -1,6 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../typeStore";
+import { ResponseAPI } from "../../../services/types";
+import { apiPost } from "../../../services/ApiService";
 
 const initialState: User = {
   id: "",
@@ -8,7 +10,16 @@ const initialState: User = {
   name: "",
   password: "",
   profile: "",
+  token: "",
 };
+
+export const getUserByEmail = createAsyncThunk(
+  "/login/getUserByEmail",
+  async ({ email, password }: any) => {
+    const resposta = await apiPost("/login", { email, password });
+    return resposta;
+  }
+);
 
 const userLoggedSlice = createSlice({
   name: "userLogged",
@@ -24,6 +35,21 @@ const userLoggedSlice = createSlice({
     clearUserLogged: (state) => {
       return initialState;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      getUserByEmail.fulfilled,
+      (state, action: PayloadAction<ResponseAPI>) => {
+        if (action.payload.success) {
+          Object.assign(state, action.payload.data);
+          console.log(state.name);
+        }
+        if(!action.payload.success){
+          Object.assign(state, initialState);
+          console.log(state.name)
+        }
+      }
+    );
   },
 });
 

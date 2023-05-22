@@ -7,17 +7,15 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 const apiGet = async (rota: string, params?: any): Promise<ResponseAPI> => {
   try {
     const resposta: AxiosResponse = await axios.get(rota, { params });
-
     const retornoAPI: ResponseAPI = {
       success: resposta.data.success,
-      message: resposta.data.message,
       data: resposta.data.data,
     };
+
     return retornoAPI;
   } catch (error: any) {
     const retornoAPIError: ResponseAPI = {
       success: error.response.data.success,
-      message: error.response.data.message,
       data: error.response.data.data,
     };
 
@@ -29,10 +27,8 @@ const apiGet = async (rota: string, params?: any): Promise<ResponseAPI> => {
 const apiPost = async (rota: string, dados: any): Promise<ResponseAPI> => {
   try {
     const resposta: AxiosResponse = await axios.post(rota, dados);
-
     const retornoAPI: ResponseAPI = {
       success: resposta.data.success,
-      message: resposta.data.message,
       data: resposta.data.data,
     };
 
@@ -40,7 +36,6 @@ const apiPost = async (rota: string, dados: any): Promise<ResponseAPI> => {
   } catch (error: any) {
     const retornoAPIError: ResponseAPI = {
       success: error.response.data.success,
-      message: error.response.data.message,
       data: error.response.data.data,
     };
 
@@ -56,7 +51,6 @@ const apiPut = async (rota: string, dados: any) => {
 
     const retornoAPI: ResponseAPI = {
       success: resposta.data.success,
-      message: resposta.data.message,
       data: resposta.data.data,
     };
 
@@ -64,7 +58,6 @@ const apiPut = async (rota: string, dados: any) => {
   } catch (error: any) {
     const retornoAPIError: ResponseAPI = {
       success: error.response.data.success,
-      message: error.response.data.message,
       data: error.response.data.data,
     };
 
@@ -79,7 +72,6 @@ const apiDelete = async (rota: string) => {
 
     const retornoAPI: ResponseAPI = {
       success: resposta.data.success,
-      message: resposta.data.message,
       data: resposta.data.data,
     };
 
@@ -87,7 +79,6 @@ const apiDelete = async (rota: string) => {
   } catch (error: any) {
     const retornoAPIError: ResponseAPI = {
       success: error.response.data.success,
-      message: error.response.data.message,
       data: error.response.data.data,
     };
 

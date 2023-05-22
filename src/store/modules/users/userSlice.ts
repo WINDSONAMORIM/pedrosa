@@ -20,7 +20,6 @@ export const addUser = createAsyncThunk(
   "users/addUser",
   async (dados: Omit<User, "id">) => {
     const resposta = await apiPost("/users", dados);
-
     return resposta;
   }
 );
@@ -29,6 +28,14 @@ export const getUserAll = createAsyncThunk("/users/getUserAll", async () => {
   const resposta = await apiGet("/users");
   return resposta;
 });
+
+// export const getUserByEmail = createAsyncThunk(
+//   "/login/getUserByEmail",
+//   async ({email, password}:any) => {
+//     const resposta = await apiPost("/login", {email,password});
+//     return resposta;
+//   }
+// );
 
 const usersSlice = createSlice({
   name: "users",
@@ -49,11 +56,17 @@ const usersSlice = createSlice({
     builder.addCase(
       getUserAll.fulfilled,
       (state, action: PayloadAction<ResponseAPI>) => {
-        //if (action.payload.success) {
+        if (action.payload.success) {
           usersAdapter.setAll(state, action.payload.data);
-        //}
+        }
       }
     );
+    // builder.addCase(
+    //   getUserByEmail.fulfilled,
+    //   (state, action: PayloadAction<ResponseAPI>) => {
+    //     usersAdapter.setOne(state, action.payload.data);
+    //   }
+    // );
   },
 });
 

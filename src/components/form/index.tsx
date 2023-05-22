@@ -7,13 +7,9 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-import {
-  addUser,
-  searchUsers,
-  getUserAll,
-} from "../../store/modules/users/userSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setUserLogged } from "../../store/modules/userLogged/userLoggedSlice";
+import { getUserByEmail, setUserLogged } from "../../store/modules/userLogged/userLoggedSlice";
+import { User } from "../../store/modules/typeStore";
 
 interface FormProps {
   mode: "login" | "signUp";
@@ -35,13 +31,20 @@ export const Form = ({ mode }: FormProps) => {
   const [errorName, setErrorName] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
-  const listUsers = useAppSelector(searchUsers);
+  const [userExist, setUserExist] = useState<User| undefined>(undefined);
+  const logado = useAppSelector((state) => state.userLogged);
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getUserAll());
-  }, [dispatch]);
+    useEffect(() => {
+      if (mode === "login") {
+        dispatch(getUserByEmail({ email: email, password: password }));
+      }
+    }, [dispatch, mode, email, password]);
+
+    useEffect(() => {
+      setUserExist(logado);
+    }, [logado]);
 
   const navigate = useNavigate();
 
@@ -119,62 +122,56 @@ export const Form = ({ mode }: FormProps) => {
     }
   };
 
-  // const handleNavigate = () => {
-  //   if (mode === "login") {
-  //     navigate("/signUp");
-  //   } else {
-  //     navigate("/");
-  //   }
-  // };
+  const handleNavigate = () => {
+    if (mode === "login") {
+      navigate("/signUp");
+    } else {
+      navigate("/");
+    }
+  };
 
   const createAccount = () => {
     const newUser = {
       name,
       email,
+      profile: "ADMIN",
       password,
-      profile,
     };
 
-    const userExist = listUsers.some(
-      (user) => user.email === newUser.email
-    );
+    //const userExist = !listUsers//.some((user) => user.email === newUser.email);
+    //console.log(listUsers)
 
-    if (!userExist) {
-      dispatch(addUser(newUser));
-      clearInputs();
-      navigate("/");
-    } else {
-      alert("E-mail já em uso!");
-    }
+    // if (!userExist) {
+    //   dispatch(addUser(newUser));
+    //   clearInputs();
+    //   navigate("/");
+    // } else {
+    //   alert("E-mail já em uso!");
+    // }
   };
 
   const login = () => {
-    const userExist = listUsers.find((user) => user.email === email);
-    console.log("emailT: ", email, "emailB: ", userExist?.email);
-
-    if (!userExist) {
+  //  dispatch(
+  //     getUserByEmail({ email: email, password: password })
+  //   );
+console.log('user',userExist?.name)
+console.log('logado',logado)
+    if (!userExist?.id) {
+      console.log(userExist)
       const confirm = window.confirm(
         "User not registered. Do you want to register an account?"
       );
       if (confirm) {
         navigate("/signUp");
       }
+      return
     }
+    // console.log(userExist.password)
+    // if (userExist?.password !== password) {
+    //   alert("Incorrect data please check the data and try again");
+    //   return;
+    // }
 
-    if (userExist?.password !== password) {
-      alert("Incorrect data please check the data and try again");
-      return;
-    }
-
-    dispatch(
-      setUserLogged({
-        id: userExist.id,
-        name: userExist.name,
-        email: userExist.email,
-        password: userExist.password,
-        profile: userExist.profile,
-      })
-    );
     navigate("/home");
   };
 

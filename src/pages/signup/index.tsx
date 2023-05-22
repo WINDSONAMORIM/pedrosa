@@ -4,7 +4,7 @@ import { BannerLogin } from '../../components/bannerLogin';
 import { Form } from '../../components/form';
 import { Box, Grid } from '@mui/material';
 
-export const Signup = ()=>{
+export const SignUp = ()=>{
     return(
         <Box sx={{ width: '100vw', height: '100vh'}}>
         <Grid container spacing={2} sx={{ height: '100%'}} >
@@ -15,7 +15,7 @@ export const Signup = ()=>{
             </Grid>            
             <Grid item xs={12} md={4}>                    
                 <ContainerForm>
-                    <Form mode='signup' />
+                    <Form mode='signUp' />
                 </ContainerForm>                
             </Grid>            
         </Grid>
