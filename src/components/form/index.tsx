@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Stack, Button, Typography } from "@mui/material";
+import { Stack, Button, Typography, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { InputDefault, Name } from "../inputDefault";
 
@@ -10,6 +10,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getUserByEmail, setUserLogged } from "../../store/modules/userLogged/userLoggedSlice";
 import { User } from "../../store/modules/typeStore";
+import { addUser, getUserAll, searchUsers } from "../../store/modules/users/userSlice";
+import { ResponseAPI } from "../../services/types";
 
 interface FormProps {
   mode: "login" | "signUp";
@@ -31,7 +33,7 @@ export const Form = ({ mode }: FormProps) => {
   const [errorName, setErrorName] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
-  const [userExist, setUserExist] = useState<User| undefined>(undefined);
+  const [userExist, setUserExist] = useState<User | undefined>(undefined);
   const logado = useAppSelector((state) => state.userLogged);
 
   const dispatch = useAppDispatch();
@@ -41,10 +43,6 @@ export const Form = ({ mode }: FormProps) => {
         dispatch(getUserByEmail({ email: email, password: password }));
       }
     }, [dispatch, mode, email, password]);
-
-    useEffect(() => {
-      setUserExist(logado);
-    }, [logado]);
 
   const navigate = useNavigate();
 
@@ -117,7 +115,6 @@ export const Form = ({ mode }: FormProps) => {
         setRepeatPassword(value);
         handleValidateInput(value, key);
         break;
-
       default:
     }
   };
@@ -137,23 +134,27 @@ export const Form = ({ mode }: FormProps) => {
       profile: "ADMIN",
       password,
     };
-
-    //const userExist = !listUsers//.some((user) => user.email === newUser.email);
-    //console.log(listUsers)
-
-    // if (!userExist) {
-    //   dispatch(addUser(newUser));
-    //   clearInputs();
-    //   navigate("/");
-    // } else {
-    //   alert("E-mail já em uso!");
-    // }
+    dispatch(addUser(newUser))
+      .then((response) => {
+        const payload = response.payload as ResponseAPI;
+        if (!payload.success) {
+          alert("E-mail já em uso!");
+          return;
+        }
+          alert("Cadastro realizado com sucesso!");
+          dispatch(addUser(newUser));
+          clearInputs();
+          navigate("/");
+      })
+      .catch((error) => {
+        console.log("Erro ao criar usuário:", error);
+      });
   };
 
   const login = () => {
-  //  dispatch(
-  //     getUserByEmail({ email: email, password: password })
-  //   );
+   dispatch(
+      getUserByEmail({ email: email, password: password })
+    );
 console.log('user',userExist?.name)
 console.log('logado',logado)
     if (!userExist?.id) {
