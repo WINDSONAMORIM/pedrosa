@@ -9,9 +9,10 @@ export interface ResponseAPI{
 //   message?: string;
 //   data: any;
 // }
-/*
-export interface User {
+
+export interface SaveUser {
   name: string;
   email: string;
   password: string;
-}*/
+  profile: string;
+}
