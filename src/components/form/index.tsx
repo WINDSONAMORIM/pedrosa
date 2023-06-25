@@ -8,9 +8,16 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getUserByEmail, setUserLogged } from "../../store/modules/userLogged/userLoggedSlice";
+import {
+  getUserByEmail,
+  setUserLogged,
+} from "../../store/modules/userLogged/userLoggedSlice";
 import { User } from "../../store/modules/typeStore";
-import { addUser, getUserAll, searchUsers } from "../../store/modules/users/userSlice";
+import {
+  addUser,
+  getUserAll,
+  searchUsers,
+} from "../../store/modules/users/userSlice";
 import { ResponseAPI } from "../../services/types";
 
 interface FormProps {
@@ -38,11 +45,11 @@ export const Form = ({ mode }: FormProps) => {
 
   const dispatch = useAppDispatch();
 
-    useEffect(() => {
-      if (mode === "login") {
-        dispatch(getUserByEmail({ email: email, password: password }));
-      }
-    }, [dispatch, mode, email, password]);
+  useEffect(() => {
+    if (mode === "login") {
+      //dispatch(getUserByEmail({ email: email, password: password }));
+    }
+  }, [dispatch, mode, email, password]);
 
   const navigate = useNavigate();
 
@@ -141,39 +148,38 @@ export const Form = ({ mode }: FormProps) => {
           alert("E-mail já em uso!");
           return;
         }
-          alert("Cadastro realizado com sucesso!");
-          dispatch(addUser(newUser));
-          clearInputs();
-          navigate("/");
+        alert("Cadastro realizado com sucesso!");
+        dispatch(addUser(newUser));
+        clearInputs();
+        navigate("/");
       })
       .catch((error) => {
-        console.log("Erro ao criar usuário:", error);
+        
+        alert("Erro ao criar usuário:"+ error);
       });
   };
 
   const login = () => {
-   dispatch(
-      getUserByEmail({ email: email, password: password })
-    );
-console.log('user',userExist?.name)
-console.log('logado',logado)
-    if (!userExist?.id) {
-      console.log(userExist)
-      const confirm = window.confirm(
-        "User not registered. Do you want to register an account?"
-      );
-      if (confirm) {
-        navigate("/signUp");
-      }
-      return
-    }
-    // console.log(userExist.password)
-    // if (userExist?.password !== password) {
-    //   alert("Incorrect data please check the data and try again");
-    //   return;
-    // }
+    dispatch(getUserByEmail({ email: email, password: password }))
+      .then((response) => {
+        const payload = response.payload as ResponseAPI;
+        if (!payload.success) {
+          console.log(payload.error);
+          alert(payload.error);
+          return;
+        }
+        alert("login Efetuado com sucesso!");
+        // dispatch(addUser(newUser));
+        clearInputs();
+        navigate("/home");
+      })
+      .catch((error) => {
+        alert("Erro ao logar:"+ error);
+      });
+    //}
+  
 
-    navigate("/home");
+    //navigate("/home");
   };
 
   const clearInputs = () => {

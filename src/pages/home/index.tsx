@@ -11,17 +11,6 @@ export const Home = () => {
 
   const [userLogged, setUserLogged] = useState(null);
 
-  useEffect(() => {
-    //const user = useAppSelector((state) => state.userLogged);
-    // console.log('home: ',userLogged.name);
-    //  usuarioLogado = localStorage.getItem("usuarioLogado");
-    // if (!user) {
-    //   navigate("/");
-    // } else {
-    //   setUserLogged(user);
-    // }
-  }, []);
-
   const [openModal, setOpenModal] = useState(false);
 
   const handleClose = () => {
