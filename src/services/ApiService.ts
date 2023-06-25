@@ -30,17 +30,32 @@ const apiPost = async (rota: string, dados: any): Promise<ResponseAPI> => {
     const retornoAPI: ResponseAPI = {
       success: resposta.data.success,
       data: resposta.data.data,
-    };
-
+    };    
     return retornoAPI;
   } catch (error: any) {
-    const retornoAPIError: ResponseAPI = {
-      success: error.response.data.success,
-      data: error.response.data.data,
-    };
-
-    return retornoAPIError;
-  }
+    if (error.response) {
+      const retornoAPIError: ResponseAPI = {
+        success: error.response.data.success,
+        data: error.response.data.data,
+        error: error.response.data.error,
+      };
+      console.log("Erro na resposta da API:", error.response);
+      return retornoAPIError;
+    } else if (error.request) {
+      const retornoAPIError: ResponseAPI = {
+        success: false,
+        error: "Erro de conexão com a API",
+      };
+      console.log("Erro de conexão com a API:", error.code);
+      return retornoAPIError;
+    } else {
+      const retornoAPIError: ResponseAPI = {
+        success: false,
+        error: "Erro desconhecido",
+      };
+      console.log("Erro desconhecido:", error.message);
+      return retornoAPIError;
+  }}
 };
 
 // PUT
@@ -58,7 +73,7 @@ const apiPut = async (rota: string, dados: any) => {
   } catch (error: any) {
     const retornoAPIError: ResponseAPI = {
       success: error.response.data.success,
-      data: error.response.data.data,
+      error: error.response.data.error,
     };
 
     return retornoAPIError;
