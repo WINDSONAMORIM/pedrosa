@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../typeStore";
+import { Auth, User } from "../typeStore";
 import { ResponseAPI } from "../../../services/types";
 import { apiPost } from "../../../services/ApiService";
 
@@ -15,7 +15,7 @@ const initialState: User = {
 
 export const getUserByEmail = createAsyncThunk(
   "/login/getUserByEmail",
-  async ({ email, password }: any) => {
+  async ({ email, password }: Auth) => {
     const resposta = await apiPost("/login", { email, password });
     return resposta;
   }
@@ -42,13 +42,11 @@ const userLoggedSlice = createSlice({
       (state, action: PayloadAction<ResponseAPI>) => {
         if (action.payload.success) {
           Object.assign(state, action.payload.data);
-          console.log(state.name);
         }
-        if(!action.payload.success){
+        if (!action.payload.success) {
           Object.assign(state, initialState);
-          console.log(state.name)
         }
-      }
+      }      
     );
   },
 });
