@@ -9,7 +9,7 @@ export interface User {
 export interface Auth {
   email: string;
   password: string;
-  token: string;
+  token?: string;
 }
 
 export type Users = User[];

@@ -15,8 +15,7 @@ export const AppRoutes = ()=>{
                 <Route path='/signUp' element= {<SignUp />} />
                 <Route path='/home' element= {<Home />} />
                 <Route path='/venda' element= {<Venda />} />
-                <Route path='/VendaLavatorio' element= {<VendaLavatorio />} />
-                
+                <Route path='/VendaLavatorio' element= {<VendaLavatorio />} />                
                 <Route path='*' element={<h1>Pagina Erro</h1>} />
             </Routes>
         </BrowserRouter>

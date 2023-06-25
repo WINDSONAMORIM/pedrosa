@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { RootState } from "../..";
 import { apiGet, apiPost } from "../../../services/ApiService";
-import { ResponseAPI } from "../../../services/types";
+import { ResponseAPI, SaveUser } from "../../../services/types";
 import { User } from "../typeStore";
 
 const usersAdapter = createEntityAdapter<User>({
@@ -16,9 +16,9 @@ const usersAdapter = createEntityAdapter<User>({
 export const { selectAll: searchUsers, selectById: buscarUsuarioPorEmail } =
   usersAdapter.getSelectors<RootState>((state) => state.users);
 
-export const addUser = createAsyncThunk(
+export const addUser = createAsyncThunk<ResponseAPI, SaveUser>(
   "users/addUser",
-  async (dados: Omit<User, "id">) => {
+  async (dados: SaveUser) => {
     const resposta = await apiPost("/users", dados);
     return resposta;
   }
