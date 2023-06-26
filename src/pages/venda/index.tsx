@@ -4,7 +4,6 @@ import { ModalVenda } from "../../components/modalVenda/modalVenda";
 import {
   Autocomplete,
   Grid,
-  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 import { CardVenda } from "../../components/card";
@@ -66,18 +65,18 @@ export const Venda = () => {
       <HeaderHome />
       <Grid
         container
-        spacing={2}
-        margin={2}
-        sx={{ height: "100%", width: "90%" }}
+        spacing={1}
+        sx={{margin:1}}
+        paddingRight={4}         
       >
-        <Grid item xs={4}>
+        <Grid item xs={8} md={3}>
           <TextField id="cliente" label="Cliente" variant="standard" />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={4} md={3}>
           <TextField id="qtd" label="Quantidade" variant="standard" />
         </Grid>
 
-        <Grid item xs={4}>
+        <Grid item xs={6} md={3}>
           <Autocomplete
             disablePortal
             id="categoria"
@@ -86,19 +85,17 @@ export const Venda = () => {
             onChange={(event: any, newValue: string | null) => {
               setCategoria(newValue);
             }}
-            sx={{ width: 200 }}
             renderInput={(params) => (
               <TextField {...params} label="Categoria" />
             )}
           />
         </Grid>
 
-        <Grid item xs={4}>
+        <Grid item xs={6}md={3}>
           <Autocomplete
             disablePortal
             id="modelo"
             options={modeloLavatorio}
-            sx={{ width: 200 }}
             renderInput={(params) => <TextField {...params} label="Modelo" />}
           />
         </Grid>
@@ -109,8 +106,9 @@ export const Venda = () => {
                 disablePortal
                 id="cuba"
                 options={cuba}
-                sx={{ width: 200 }}
-                renderInput={(params) => <TextField {...params} label="Tipo de Cuba" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="Tipo de Cuba" />
+                )}
               />
             </Grid>
 
@@ -119,7 +117,6 @@ export const Venda = () => {
                 disablePortal
                 id="item"
                 options={coresCuba}
-                sx={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Cores Cuba" />
                 )}
@@ -135,7 +132,6 @@ export const Venda = () => {
                 disablePortal
                 id="item"
                 options={coresTecido}
-                sx={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Cores Tecido" />
                 )}
@@ -147,7 +143,6 @@ export const Venda = () => {
                 disablePortal
                 id="costura"
                 options={costura}
-                sx={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Modelo da Costura" />
                 )}
@@ -159,7 +154,6 @@ export const Venda = () => {
                 disablePortal
                 id="linha"
                 options={coresLinha}
-                sx={{ width: 200 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Cor da Linha" />
                 )}
