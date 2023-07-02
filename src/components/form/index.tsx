@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Stack, Button, Typography, Alert } from "@mui/material";
+import { Stack, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { InputDefault, Name } from "../inputDefault";
 
@@ -7,17 +7,9 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import {
-  getUserByEmail,
-  setUserLogged,
-} from "../../store/modules/userLogged/userLoggedSlice";
-import { User } from "../../store/modules/typeStore";
-import {
-  addUser,
-  getUserAll,
-  searchUsers,
-} from "../../store/modules/users/userSlice";
+import { useAppDispatch } from "../../store/hooks";
+import { getUserByEmail } from "../../store/modules/userLogged/userLoggedSlice";
+import { addUser } from "../../store/modules/users/userSlice";
 import { ResponseAPI } from "../../services/types";
 
 interface FormProps {
@@ -40,8 +32,6 @@ export const Form = ({ mode }: FormProps) => {
   const [errorName, setErrorName] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
-  const [userExist, setUserExist] = useState<User | undefined>(undefined);
-  const logado = useAppSelector((state) => state.userLogged);
 
   const dispatch = useAppDispatch();
 
@@ -154,8 +144,7 @@ export const Form = ({ mode }: FormProps) => {
         navigate("/");
       })
       .catch((error) => {
-        
-        alert("Erro ao criar usuário:"+ error);
+        alert("Erro ao criar usuário:" + error);
       });
   };
 
@@ -174,10 +163,9 @@ export const Form = ({ mode }: FormProps) => {
         navigate("/home");
       })
       .catch((error) => {
-        alert("Erro ao logar:"+ error);
+        alert("Erro ao logar:" + error);
       });
     //}
-  
 
     //navigate("/home");
   };

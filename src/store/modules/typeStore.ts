@@ -6,6 +6,12 @@ export interface User {
   password?: string;
   token?:string;  
 }
+
+export interface Client {
+  id: string;
+  name: string;
+  contact: string;
+}
 export interface Auth {
   email: string;
   password: string;
