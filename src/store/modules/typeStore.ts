@@ -6,7 +6,6 @@ export interface User {
   password?: string;
   token?:string;  
 }
-
 export interface Client {
   id: string;
   name: string;
@@ -18,4 +17,8 @@ export interface Auth {
   token?: string;
 }
 
+export interface Category {
+  id: string;
+  name: string;
+}
 export type Users = User[];
