@@ -4,15 +4,16 @@ export interface ResponseAPI{
   error?:any;
 }
 
-// export interface ResponseAPI {
-//   success: boolean;
-//   message?: string;
-//   data: any;
-// }
-
 export interface SaveUser {
   name: string;
   email: string;
   password: string;
   profile: string;
 }
+
+export interface SaveClient{
+  name: string;
+  contact: string;
+}
+
+
