@@ -6,11 +6,15 @@ import { InputDefault, Name } from "../inputDefault";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 import { useAppDispatch } from "../../store/hooks";
 import { getUserByEmail } from "../../store/modules/userLogged/userLoggedSlice";
 import { addUser } from "../../store/modules/users/userSlice";
 import { ResponseAPI } from "../../services/types";
+import { ContainerForm } from "../containerForm";
+import { WrapperContent } from "../wrapperContent";
 
 interface FormProps {
   mode: "login" | "signUp";
@@ -33,12 +37,14 @@ export const Form = ({ mode }: FormProps) => {
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (mode === "login") {
-      //dispatch(getUserByEmail({ email: email, password: password }));
-    }
+    // if (mode === "login") {
+    //   //dispatch(getUserByEmail({ email: email, password: password }));
+    // }
   }, [dispatch, mode, email, password]);
 
   const navigate = useNavigate();
@@ -116,13 +122,13 @@ export const Form = ({ mode }: FormProps) => {
     }
   };
 
-  const handleNavigate = () => {
-    if (mode === "login") {
-      navigate("/signUp");
-    } else {
-      navigate("/");
-    }
-  };
+  // const handleNavigate = () => {
+  //   if (mode === "login") {
+  //     navigate("/signUp");
+  //   } else {
+  //     navigate("/");
+  //   }
+  // };
 
   const createAccount = () => {
     const newUser = {
@@ -149,25 +155,23 @@ export const Form = ({ mode }: FormProps) => {
   };
 
   const login = () => {
+    setLoading(true);
     dispatch(getUserByEmail({ email: email, password: password }))
       .then((response) => {
         const payload = response.payload as ResponseAPI;
+        setLoading(false);
         if (!payload.success) {
           console.log(payload.error);
           alert(payload.error);
           return;
         }
         alert("login Efetuado com sucesso!");
-        // dispatch(addUser(newUser));
         clearInputs();
         navigate("/home");
       })
       .catch((error) => {
         alert("Erro ao logar:" + error);
       });
-    //}
-
-    //navigate("/home");
   };
 
   const clearInputs = () => {
@@ -179,140 +183,154 @@ export const Form = ({ mode }: FormProps) => {
 
   return (
     <React.Fragment>
-      <Stack spacing={2}>
-        {mode === "login" && (
-          <>
-            <InputDefault
-              type="text"
-              color={errorEmail ? "error" : "primary"}
-              label="E-mail"
-              name="email"
-              value={email}
-              handleChange={handleChange}
-            />
-            <InputDefault
-              type="password"
-              color={errorPassword ? "error" : "primary"}
-              label="Password"
-              name="password"
-              value={password}
-              handleChange={handleChange}
-            />
-            <Button
-              disabled={errorEmail || errorPassword}
-              variant="outlined"
-              color="primary"
-              onClick={login}
-            >
-              Login
-            </Button>
-          </>
-        )}
-      </Stack>
-      <Stack spacing={1} direction="row">
-        {mode === "login" && (
-          <>
-            <Typography variant="h6">don't have account </Typography>
-            <Typography
-              variant="h6"
-              color="primary"
-              onClick={() => navigate("/signUp")}
-            >
-              Register
-            </Typography>
-          </>
-        )}
-      </Stack>
+      <Box position="relative">
+        <Stack spacing={2}>
+          {mode === "login" && (
+            <>
+              <InputDefault
+                type="text"
+                color={errorEmail ? "error" : "primary"}
+                label="E-mail"
+                name="email"
+                value={email}
+                handleChange={handleChange}
+              />
+              <InputDefault
+                type="password"
+                color={errorPassword ? "error" : "primary"}
+                label="Password"
+                name="password"
+                value={password}
+                handleChange={handleChange}
+              />
+              <Button
+                disabled={errorEmail || errorPassword}
+                variant="outlined"
+                color="primary"
+                onClick={login}
+              >
+                Login
+              </Button>
+            </>
+          )}
+        </Stack>
+        <Stack spacing={1} direction="row">
+          {mode === "login" && (
+            <>
+              <Typography variant="h6">don't have account </Typography>
+              <Typography
+                variant="h6"
+                color="primary"
+                onClick={() => navigate("/signUp")}
+              >
+                Register
+              </Typography>
+            </>
+          )}
+        </Stack>
 
-      <Stack spacing={2}>
-        {mode === "signUp" && (
+        <Stack spacing={2}>
+          {mode === "signUp" && (
+            <>
+              <InputDefault
+                type="text"
+                color={errorName ? "error" : "primary"}
+                label="Nome"
+                name="name"
+                value={name}
+                handleChange={handleChange}
+              />
+              <InputDefault
+                type="text"
+                color={errorEmail ? "error" : "primary"}
+                label="E-mail"
+                name="email"
+                value={email}
+                handleChange={handleChange}
+              />
+              <InputDefault
+                type="password"
+                color={errorPassword ? "error" : "primary"}
+                label="Password"
+                name="password"
+                value={password}
+                handleChange={handleChange}
+              />
+              <InputDefault
+                type="password"
+                color={errorPassword ? "error" : "primary"}
+                label="Confirm Password"
+                name="repeatPassword"
+                value={repeatPassword}
+                handleChange={handleChange}
+              />
+              <RadioGroup
+                row
+                value={profile}
+                onChange={(e) => setProfile(e.target.value)}
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+                defaultValue={Profile.CARPENTER}
+              >
+                <FormControlLabel
+                  value={Profile.CARPENTER}
+                  control={<Radio />}
+                  label="Marcenária"
+                />
+                <FormControlLabel
+                  value={Profile.DELIVERY}
+                  control={<Radio />}
+                  label="Motorista"
+                />
+                <FormControlLabel
+                  value={Profile.TAPESTRY}
+                  control={<Radio />}
+                  label="Tapeçaria"
+                />
+                <FormControlLabel
+                  value={Profile.SELLER}
+                  control={<Radio />}
+                  label="Vendedor"
+                />
+              </RadioGroup>
+              <Button
+                disabled={errorName || errorEmail || errorPassword}
+                variant="outlined"
+                color="primary"
+                onClick={createAccount}
+              >
+                Register
+              </Button>
+            </>
+          )}
+        </Stack>
+        <Stack spacing={1} direction="row">
+          {mode === "signUp" && (
+            <>
+              <Typography variant="h6">already have an account?</Typography>
+              <Typography
+                variant="h6"
+                color="primary"
+                onClick={() => navigate("/")}
+              >
+                Login
+              </Typography>
+            </>
+          )}
+        </Stack>
+        {loading && (
           <>
-            <InputDefault
-              type="text"
-              color={errorName ? "error" : "primary"}
-              label="Nome"
-              name="name"
-              value={name}
-              handleChange={handleChange}
+            <CircularProgress
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
             />
-            <InputDefault
-              type="text"
-              color={errorEmail ? "error" : "primary"}
-              label="E-mail"
-              name="email"
-              value={email}
-              handleChange={handleChange}
-            />
-            <InputDefault
-              type="password"
-              color={errorPassword ? "error" : "primary"}
-              label="Password"
-              name="password"
-              value={password}
-              handleChange={handleChange}
-            />
-            <InputDefault
-              type="password"
-              color={errorPassword ? "error" : "primary"}
-              label="Confirm Password"
-              name="repeatPassword"
-              value={repeatPassword}
-              handleChange={handleChange}
-            />
-            <RadioGroup
-              row
-              value={profile}
-              onChange={(e) => setProfile(e.target.value)}
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-              defaultValue={Profile.CARPENTER}
-            >
-              <FormControlLabel
-                value={Profile.CARPENTER}
-                control={<Radio />}
-                label="Marcenária"
-              />
-              <FormControlLabel
-                value={Profile.DELIVERY}
-                control={<Radio />}
-                label="Motorista"
-              />
-              <FormControlLabel
-                value={Profile.TAPESTRY}
-                control={<Radio />}
-                label="Tapeçaria"
-              />
-              <FormControlLabel
-                value={Profile.SELLER}
-                control={<Radio />}
-                label="Vendedor"
-              />
-            </RadioGroup>
-            <Button
-              disabled={errorName || errorEmail || errorPassword}
-              variant="outlined"
-              color="primary"
-              onClick={createAccount}
-            >
-              Register
-            </Button>
           </>
         )}
-      </Stack>
-      <Stack spacing={1} direction="row">
-        {mode === "signUp" && (
-          <>
-            <Typography variant="h6">already have an account?</Typography>
-            <Typography
-              variant="h6"
-              color="primary"
-              onClick={() => navigate("/")}
-            >
-              Login
-            </Typography>
-          </>
-        )}
-      </Stack>
+      </Box>
     </React.Fragment>
   );
 };
