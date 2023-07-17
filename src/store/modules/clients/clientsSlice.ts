@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { RootState } from "../..";
 import { apiGet, apiPost } from "../../../services/ApiService";
-import { ResponseAPI } from "../../../services/types";
+import { ResponseAPI, SaveClient } from "../../../services/types";
 import { Client } from "../typeStore";
 
 const clientsAdapter = createEntityAdapter<Client>({
@@ -16,13 +16,13 @@ const clientsAdapter = createEntityAdapter<Client>({
 export const { selectAll: searchClients, selectById: searchClientsById } =
   clientsAdapter.getSelectors<RootState>((state) => state.clients);
 
-// export const addUser = createAsyncThunk<ResponseAPI, SaveUser>(
-//   "users/addUser",
-//   async (dados: SaveUser) => {
-//     const resposta = await apiPost("/users", dados);
-//     return resposta;
-//   }
-// );
+export const addClient = createAsyncThunk<ResponseAPI, SaveClient>(
+  "clients/addClient",
+  async (dados: SaveClient) => {
+    const resposta = await apiPost("/clients", dados);
+    return resposta;
+  }
+);
 
 export const getClientsAll = createAsyncThunk(
   "/clients/getClientsAll",
@@ -57,15 +57,15 @@ const clientsSlice = createSlice({
   }),
   reducers: {},
   extraReducers: (builder) => {
-    // builder.addCase(
-    //   addUser.fulfilled,
-    //   (state, action: PayloadAction<ResponseAPI>) => {
-    //     if (action.payload.success) {
-    //       clientsAdapter.addOne(state, action.payload.data);
-    //     }
-    //     state.success = action.payload.success;
-    //   }
-    // );
+    builder.addCase(
+      addClient.fulfilled,
+      (state, action: PayloadAction<ResponseAPI>) => {
+        if (action.payload.success) {
+          clientsAdapter.addOne(state, action.payload.data);
+        }
+        state.success = action.payload.success;
+      }
+    );
     builder.addCase(
       getClientsAll.fulfilled,
       (state, action: PayloadAction<ResponseAPI>) => {
